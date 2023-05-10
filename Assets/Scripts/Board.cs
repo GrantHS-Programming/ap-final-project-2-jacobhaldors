@@ -22,10 +22,10 @@ public class Board : MonoBehaviour
     }
     public void SpawnPiece()
     {
-        int random = Random.Range(0, this.tetrominoes.Length);
-        TetrominoData data = this.tetrominoes[random];
+        int random = Random.Range(0, tetrominoes.Length);
+        TetrominoData data = tetrominoes[random];
 
-        this.activePiece.Initalize(this, this.spawnPosition, data);
+        activePiece.Initalize(this, spawnPosition, data);
         Set(this.activePiece);
     }
 
