@@ -9,14 +9,23 @@ public class Board : MonoBehaviour
     public Vector2Int boardSize = new Vector2Int(10, 20);
 
 
+    public RectInt Bounds
+    {
+        get
+        {
+            Vector2Int position = new Vector2Int(-this.boardSize.x / 2, -this.boardSize.y / 2);
+            return new RectInt(position, this.boardSize);
+        }
+    }
+
     private void Awake()
     {
-        this.tilemap = GetComponentInChildren<Tilemap>();
-        this.activePiece = GetComponentInChildren<Piece>();
+        tilemap = GetComponentInChildren<Tilemap>();
+        activePiece = GetComponentInChildren<Piece>();
 
         for (int i = 0; i < this.tetrominoes.Length; i++)
         {
-            this.tetrominoes[i].Initalize();
+            tetrominoes[i].Initialize();
         }
     }
     private void Start()
@@ -28,7 +37,7 @@ public class Board : MonoBehaviour
         int random = Random.Range(0, this.tetrominoes.Length);
         TetrominoData data = this.tetrominoes[random];
 
-        this.activePiece.Initalize(this, spawnPosition, data);
+        activePiece.Initialize(this, spawnPosition, data);
         Set(this.activePiece);
     }
 
@@ -40,17 +49,33 @@ public class Board : MonoBehaviour
             this.tilemap.SetTile(tilePosition, piece.data.tile);
         }
     }
-
-    public bool IsValidPosition(Piece piece, Vector3Int position)
+    public void Clear(Piece piece)
     {
         for (int i = 0; i < piece.cells.Length; i++)
         {
             Vector3Int tilePosition = piece.cells[i] + piece.position;
+            this.tilemap.SetTile(tilePosition, null);
+        }
+    }
 
-            if (this.tilemap.HasTile(tilePosition))
+    public bool IsValidPosition(Piece piece, Vector3Int position)
+    {
+        RectInt bounds = this.Bounds;
+
+        for (int i = 0; i < piece.cells.Length; i++)
+        {
+            Vector3Int tilePosition = piece.cells[i] + piece.position;
+
+            if (!bounds.Contains((Vector2Int)tilePosition)) { 
+                return false;
+            }
+
+            if (tilemap.HasTile(tilePosition))
             {
                 return false;
             }
         }
+
+        return true;
     }
 }
