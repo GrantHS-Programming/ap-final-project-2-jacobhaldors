@@ -7,8 +7,6 @@ public class Board : MonoBehaviour
     public TetrominoData[] tetrominoes;
     public Vector3Int spawnPosition;
     public Vector2Int boardSize = new Vector2Int(10, 20);
-
-
     public RectInt Bounds
     {
         get
@@ -34,11 +32,14 @@ public class Board : MonoBehaviour
     }
     public void SpawnPiece()
     {
-        int random = Random.Range(0, this.tetrominoes.Length);
-        TetrominoData data = this.tetrominoes[random];
+        int random = Random.Range(0, tetrominoes.Length);
+        TetrominoData data = tetrominoes[random];
 
         activePiece.Initialize(this, spawnPosition, data);
-        Set(this.activePiece);
+        if (IsValidPosition(activePiece, spawnPosition))
+        {
+            Set(activePiece);
+        }
     }
 
     public void Set(Piece piece)
@@ -46,7 +47,7 @@ public class Board : MonoBehaviour
         for (int i = 0; i < piece.cells.Length; i++)
         {
             Vector3Int tilePosition = piece.cells[i] + piece.position;
-            this.tilemap.SetTile(tilePosition, piece.data.tile);
+            tilemap.SetTile(tilePosition, piece.data.tile);
         }
     }
     public void Clear(Piece piece)
