@@ -5,14 +5,14 @@ public class Board : MonoBehaviour
     public Tilemap tilemap { get; private set; }
     public Piece activePiece { get; private set; }
     public TetrominoData[] tetrominoes;
-    public Vector3Int spawnPosition;
+    public Vector3Int spawnPosition = new Vector3Int(-1, 8, 0);
     public Vector2Int boardSize = new Vector2Int(10, 20);
     public RectInt Bounds
     {
         get
         {
             Vector2Int position = new Vector2Int(-this.boardSize.x / 2, -this.boardSize.y / 2);
-            return new RectInt(position, this.boardSize);
+            return new RectInt(position, boardSize);
         }
     }
 
@@ -36,6 +36,7 @@ public class Board : MonoBehaviour
         TetrominoData data = tetrominoes[random];
 
         activePiece.Initialize(this, spawnPosition, data);
+
         if (IsValidPosition(activePiece, spawnPosition))
         {
             Set(activePiece);

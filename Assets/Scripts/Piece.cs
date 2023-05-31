@@ -81,6 +81,42 @@ public class Piece : MonoBehaviour
         int originalRotation = rotationIndex;
 
         rotationIndex = Wrap(rotationIndex + direction, 0, 4);
+        ApplyRotationMatrix(direction);
+
+        if (!TestWallKicks(rotationIndex, direction))
+        {
+            rotationIndex = originalRotation;
+            ApplyRotationMatrix(-direction);
+        }
+    }
+
+    private void ApplyRotationMatrix(int direction)
+    {
+        float[] matrix = Data.RotationMatrix;
+        for (int i = 0; i < cells.Length; i++)
+        {
+            Vector3 cell = cells[i];
+
+            int x, y;
+
+            switch (data.tetromino)
+            {
+                case Tetromino.I:
+                case Tetromino.O:
+                    cell.x -= 0.5f;
+                    cell.y -= 0.5f;
+                    x = Mathf.CeilToInt((cell.x * matrix[0] * direction) + (cell.y * matrix[1] * direction));
+                    y = Mathf.CeilToInt((cell.x * matrix[2] * direction) + (cell.y * matrix[3] * direction));
+                    break;
+
+                default:
+                    x = Mathf.RoundToInt((cell.x * matrix[0] * direction) + (cell.y * matrix[1] * direction));
+                    y = Mathf.RoundToInt((cell.x * matrix[2] * direction) + (cell.y * matrix[3] * direction));
+                    break;
+            }
+
+            cells[i] = new Vector3Int(x, y, 0);
+        }
         for (int i = 0; i < cells.Length; i++)
         {
             Vector3 cell = cells[i];
@@ -104,6 +140,33 @@ public class Piece : MonoBehaviour
             }
             cells[i] = new Vector3Int(x, y, 0);
         }
+    }
+
+    private bool TestWallKicks(int rotationIndex, int rotationDirection)
+    {
+        int wallKickIndex = GetWallKickIndex(rotationIndex, rotationDirection);
+
+        for(int i = 0; i < data.wallKicks.GetLength(1); i++)
+        {
+            Vector2Int translation = data.wallKicks[wallKickIndex, i];
+
+            if(Move(translation))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    private int GetWallKickIndex(int rotationIndex, int rotationDirection)
+    {
+        int wallKickIndex = rotationIndex * 2;
+
+        if(rotationDirection < 0)
+        {
+            wallKickIndex--;
+        }
+        return Wrap(wallKickIndex, 0, data.wallKicks.GetLength(0));
     }
     private int Wrap(int input, int min, int max)
     {
