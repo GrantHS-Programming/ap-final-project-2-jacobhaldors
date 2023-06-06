@@ -39,6 +39,7 @@ public class Piece : MonoBehaviour
     private void Update()
     {
         board.Clear(this);
+        lockTime += Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -47,22 +48,22 @@ public class Piece : MonoBehaviour
         {
             Rotate(1);
         }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Move(Vector2Int.left);
-        } else if (Input.GetKeyDown(KeyCode.D))
-        {
-            Move(Vector2Int.right);
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            Move(Vector2Int.down);
-        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             HardDrop();
         }
-
+        if (Time.time > moveTime)
+        {
+            HandleMoveInputs();
+        }
+        if (Time.time > stepTime)
+        {
+            HandleMoveInputs();
+        }
+        if(Time.time > stepTime)
+        {
+            Step();
+        }
         board.Set(this);
     }
     private void HandleMoveInputs()
@@ -125,7 +126,7 @@ public class Piece : MonoBehaviour
     {
         int originalRotation = rotationIndex;
 
-        rotationIndex = Wrap(rotationIndex + direction, 0, 2);
+        rotationIndex = Wrap(rotationIndex + direction, 0, 4);
         ApplyRotationMatrix(direction);
 
         if (!TestWallKicks(rotationIndex, direction))
@@ -160,29 +161,6 @@ public class Piece : MonoBehaviour
                     break;
             }
 
-            cells[i] = new Vector3Int(x, y, 0);
-        }
-        for (int i = 0; i < cells.Length; i++)
-        {
-            Vector3 cell = cells[i];
-
-            int x, y;
-
-            switch (data.tetromino)
-            {
-                case Tetromino.I:
-                case Tetromino.O:
-                    cell.x -= 0.5f;
-                    cell.y -= 0.5f;
-                    x = Mathf.CeilToInt((cell.x * Data.RotationMatrix[0] * direction) + (cell.y * Data.RotationMatrix[1] * direction * direction));
-                    y = Mathf.CeilToInt((cell.x * Data.RotationMatrix[2] * direction) + (cell.y * Data.RotationMatrix[3] * direction));
-                    break;
-
-                default:
-                    x = Mathf.RoundToInt((cell.x * Data.RotationMatrix[0] * direction) + (cell.y * Data.RotationMatrix[1] * direction));
-                    y = Mathf.RoundToInt((cell.x * Data.RotationMatrix[2] * direction) + (cell.y * Data.RotationMatrix[3] * direction));
-                    break;
-            }
             cells[i] = new Vector3Int(x, y, 0);
         }
     }
