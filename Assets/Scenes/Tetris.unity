@@ -508,6 +508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbcf5fee1020d4a43a43f052a9c3082b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnPosition: {x: 0, y: 0, z: 0}
   tetrominoes:
   - tetromino: 0
     tile: {fileID: 11400000, guid: c62228924ba87994fb7c86729ee0b304, type: 2}
@@ -523,7 +524,9 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: e18b56dc746cbfd4ca0c82a1cba3130b, type: 2}
   - tetromino: 6
     tile: {fileID: 11400000, guid: 533cb5f395a004b4dbc85ca4cd647235, type: 2}
-  spawnPosition: {x: 0, y: 0, z: 0}
+  boardSize: {x: 10, y: 20}
+  score: 0
+  scoreText: {fileID: 0}
 --- !u!114 &1688726468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -536,6 +539,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69430840014b2a64c85d497257845af3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stepDelay: 1
+  moveDelay: 0.1
+  lockDelay: 0.5
 --- !u!1 &1851483751
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,6 +635,7 @@ GameObject:
   - component: {fileID: 2098239811}
   - component: {fileID: 2098239813}
   - component: {fileID: 2098239812}
+  - component: {fileID: 2098239814}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Untagged
@@ -736,3 +743,15 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &2098239814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098239810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be494ad682bae3948b4fe4eac2d5ef05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

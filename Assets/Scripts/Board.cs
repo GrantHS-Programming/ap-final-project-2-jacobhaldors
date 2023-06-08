@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 public class Board : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class Board : MonoBehaviour
     public Vector3Int spawnPosition = new Vector3Int(-1, 8, 0);
     public TetrominoData[] tetrominoes;
     public Vector2Int boardSize = new Vector2Int(10, 20);
+    public int score = 0;
+    public Text scoreText;
     public RectInt Bounds
     {
         get
@@ -34,6 +37,7 @@ public class Board : MonoBehaviour
     {
         int random = Random.Range(0, tetrominoes.Length);
         TetrominoData data = tetrominoes[random];
+        spawnPosition = new Vector3Int(-1, 8, 0);
         activePiece.Initialize(this, spawnPosition, data);
         if (IsValidPosition(activePiece, spawnPosition))
         {
@@ -95,6 +99,8 @@ public class Board : MonoBehaviour
             if (IsLineFull(row))
             {
                 LineClear(row);
+                score += 1000;
+                scoreText.text = "Score: " + score.ToString();
             }
             else
             {
