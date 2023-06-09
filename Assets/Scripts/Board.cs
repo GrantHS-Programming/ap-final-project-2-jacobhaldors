@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
+using TMPro;
 public class Board : MonoBehaviour
 {
     public Tilemap tilemap { get; private set; }
@@ -8,8 +9,8 @@ public class Board : MonoBehaviour
     public Vector3Int spawnPosition = new Vector3Int(-1, 8, 0);
     public TetrominoData[] tetrominoes;
     public Vector2Int boardSize = new Vector2Int(10, 20);
-    public int score = 0;
-    public Text scoreText;
+    private int score;
+    public TextMeshProUGUI scoreText;
     public RectInt Bounds
     {
         get
@@ -32,6 +33,14 @@ public class Board : MonoBehaviour
     private void Start()
     {
         SpawnPiece();
+        StartCoroutine(SpawnTarget());
+        score = 0;
+        scoreText.text = "Score: " + score;
+    }
+
+    IEnumerator SpawnTarget()
+    {
+
     }
     public void SpawnPiece()
     {
@@ -99,8 +108,6 @@ public class Board : MonoBehaviour
             if (IsLineFull(row))
             {
                 LineClear(row);
-                score += 1000;
-                scoreText.text = "Score: " + score.ToString();
             }
             else
             {
